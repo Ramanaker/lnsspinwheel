@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Index</title>
+  <style>
+   body {
+      background-image: url(Laxmi_Narasimha_Swamy.png);	
+      background-size: 30% 50%;
+      background-position: right;
+      font-family: Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    #live-update {
+      font-size: 1.2em;
+      font-weight: bold;
+      margin-bottom: 15px;
+      color: darkblue;
+      text-align: center;
+    }
+
+    #wheel-container {
+      position: relative;
+      width: 150px;
+      height: 150px;
+      margin-bottom: 15px;
+    }
+
+    #wheel {
+      width: 100%;
+      height: 100%;
+      border: 0.5px solid #333;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: conic-gradient(yellow 0deg 90deg,
+        #ffcc20 90deg 180deg,
+        yellow 180deg 270deg,
+        #ffcc20 270deg 360deg);
+      font-size: 0.9em;
+      text-align: center;
+      transition: transform 2s ease-out;
+      position: relative;
+    }
+
+    #wheel::before {
+      content: "";
+      position: absolute;
+      width: 100%;
+      height: 0.5px;
+      background: solid #333;
+      top: 50%;
+      left: 0;
+      transform: translateY(-50%);
+      z-index: 1;
+    }
+
+    #wheel::after {
+      content: "";
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background: #333;
+      border-radius: 50%;
+      z-index: 2;
+    }
+
+    #double-amount {
+      position: absolute;
+      top: 20%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-weight: bold;
+      color: blue;
+      z-index: 1;
+    }
+
+    #half-amount {
+      position: absolute;
+      bottom: 20%;
+      left: 50%;
+      transform: translate(-50%, 50%);
+      font-weight: bold;
+      color: purple;
+      z-index: 1;
+    }
+
+    #result {
+      margin-top: 15px;
+      font-size: 1.2em;
+      font-weight: regular;
+      text-align: center;
+    }
+
+    #pointer {
+      position: relative;
+      top: -7px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 0;
+      height: 0;
+      border-left: 8px solid transparent;
+      border-right: 8px solid transparent;
+      border-bottom: 16px solid #333;
+    }
+
+    button {
+      margin-top: 10px;
+      padding: 8px 16px;
+      font-size: 1em;
+      cursor: pointer;
+      background-color: #333;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      margin-right: 5px; /* Adjusts spacing between buttons */
+    }
+
+    button:hover {
+      background-color: red;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+
+    label {
+      margin: 3px 0;
+    }
+
+    input {
+      padding: 5px;
+      font-size: 1em;
+      margin-bottom: 8px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    
+    /* New styling for Index! */
+    #spin-win-info {
+      background-color: rgba(255, 255, 255, 0.8);
+      padding: 10px;
+      border-radius: 10px;
+      text-align: center;
+      margin-bottom: 20px;
+      max-width: 90%;
+    }
+
+    #spin-win-info p {
+      font-size: 1.1em;
+      font-weight: bold;
+      color: #333;
+      margin: 0;
+    }
+    
+    /* New links styling */
+    #links {
+      margin-top: 20px;
+      text-align: center;
+    }
+    #links a {
+      margin: 0 10px;
+      text-decoration: none;
+      color: #333;
+    }
+    #links a:hover {
+      color: darkblue;
+    }
+  </style>
+ </head>
+<body>
+  <div id="spin-win-info">
+    <p>LNS Spin and Win Game!</p>
+    <p>1. You can win double or half the amount you paid.</p>
+    <p>2. Winners will receive their amount within 1 hour or by the end of the day.</p>
+    <p>Good luck!</p>
+  </div>
+
+  <div id="live-update">Spin the wheel to win!</div>
+  
+  <form id="spin-form" action="https://formsubmit.co/ramanaker.tr@gmail.com" method="POST">
+    <input type="hidden" name="_subject" value="Spin Wheel Result">
+    <input type="hidden" name="_autoresponse" value="Thank you for participating!">
+    <input type="hidden" name="_template" value="table">
+    <label for="phone">Enter Player Phone Number:</label>
+    <input type="tel" id="phone" name="phone" required pattern="[0-9]{10}" title="Please enter a valid 10-digit phone number">
+    <input type="hidden" id="result-input" name="result">
+  </form>
+  
+  <div id="wheel-container">
+    <div id="wheel">
+      <div id="double-amount">Double Amount</div>
+      <div id="half-amount">Half Amount</div>
+    </div>
+    <div id="pointer"></div>
+  </div>
+  
+  <div id="result">Result: </div>
+
+  <!-- Replace the payment buttons with UPI deep links -->
+  <div>
+    <a href="intent://pay?pa=9030325438@ibl&pn=John Doe&am=50&cu=INR&tn=Test Payment#Intent;scheme=upi;package=com.google.android.apps.nbu.paisa.user;end">Pay ₹50 via UPI</a>
+    <button onclick="spinWheel(50)">Spin for ₹50</button>
+    </div>
+  <div>
+    <a href="phonepe://pay?pa=9030325438@ibl&pn=User1&tn=Test UPI&am=20&cu=INR&mc=1234&tr=01234">Pay ₹30 via UPI</a>
+    <button onclick="spinWheel(30)">Spin for ₹30</button>
+   </div>
+  <div>
+    <a href="tez://upi/pay?pa=9032176917@upi&pn=User1&tn=Test UPI&am=20&cu=INR&mc=1234&tr=01234">Pay ₹20 via UPI</a>
+    <button onclick="spinWheel(50)">Spin for ₹50</button>
+   </div>
+
+  <button onclick="initiateUPIPayment(50)">Pay ₹50 via UPI</button>
+
+<script>
+  function initiateUPIPayment(amount) {
+    const upiLink = `phonepe://pay?pa=9030325438@ibl&pn=User1&tn=Test UPI&am=20&cu=INR&mc=1234&tr=01234`;
+    window.location.href = upiLink;
+  }
+</script>
+
+  <div id="links">
+    <a href="javascript:void(0)" onclick="navigate('Terms & Conditions.html')">Terms & Conditions</a>
+    <a href="javascript:void(0)" onclick="navigate('Contact Us.html')">Contact Us</a>
+    <a href="javascript:void(0)" onclick="navigate('Cancellation & Refund Policy.html')">Cancellation & Refund Policy</a>
+    <a href="javascript:void(0)" onclick="navigate('Privacy Policy.html')">Privacy Policy</a>
+    <a href="javascript:void(0)" onclick="navigate('Shipping & Delivery Policy.html')">Shipping & Delivery Policy</a>
+  </div>
+
+  <script>
+    function shuffle(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+      return array;
+    }
+
+    function generateOutcomes() {
+      const outcomes = ["Double Amount", "Half Amount", "Half Amount", "Half Amount"];
+      return shuffle(outcomes);
+    }
+
+    function getStoredData() {
+      const spinData = JSON.parse(localStorage.getItem('spinData')) || { outcomes: generateOutcomes(), spinCount: 0 };
+      return spinData;
+    }
+
+    function updateStoredData(spinData) {
+      localStorage.setItem('spinData', JSON.stringify(spinData));
+    }
+
+    function spinWheel(amount) {
+      const phoneInput = document.getElementById('phone').value;
+      const phonePattern = /^[0-9]{10}$/;
+
+      if (!phonePattern.test(phoneInput)) {
+        alert('Please enter a valid 10-digit phone number');
+        return;
+      }
+
+      let spinData = getStoredData();
+
+      if (spinData.spinCount % 4 === 0) {
+        spinData.outcomes = generateOutcomes();
+      }
+
+      const result = spinData.outcomes[spinData.spinCount % 4];
+
+      if (result === "Double Amount") {
+        amount *= 2;
+      } else if (result === "Half Amount") {
+        amount /= 2;
+      }
+
+      const wheel = document.getElementById('wheel');
+      const resultDisplay = document.getElementById('result');
+      const resultInput = document.getElementById('result-input');
+      const spinForm = document.getElementById('spin-form');
+      const liveUpdate = document.getElementById('live-update');
+
+      wheel.style.transform = `rotate(${spinData.spinCount * 360 + (result === "Double Amount" ? 180 : 0) + 3600}deg)`;
+
+      liveUpdate.textContent = "Spinning...";
+
+
+      setTimeout(() => {
+        const resultText = `Result: ${result} (₹${amount})`;
+        resultDisplay.textContent = resultText;
+        resultInput.value = resultText;
+        spinForm.submit();
+        
+        
+      }, 2000);
+
+      spinData.spinCount++;
+      updateStoredData(spinData);
+     
+    }
+
+    function navigate(page) {
+      localStorage.setItem('currentPage', page);
+      window.location.href = page;
+    }
+
+    document.addEventListener('DOMContentLoaded', (event) => {
+      const currentPage = localStorage.getItem('currentPage');
+      if (currentPage && currentPage !== 'index.html') {
+        localStorage.removeItem('currentPage');
+        window.location.href = currentPage;
+      }
+    });
+  </script>
+</body>
+</html>
